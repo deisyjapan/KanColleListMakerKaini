@@ -1081,10 +1081,11 @@
 
 		if (optionMode == OPMODE_OTHER){
 
-			pos 0, mesy
-			objsize Scale(350), scale20
-			button gosub "Amazonほしい物リスト", *Amazon: mesy += scale20
-			//http://www.amazon.co.jp/wishlist/181BGDSFXZC6M/?sort=priority
+			// 干し芋のリストも消失しているのでコメント化
+//			pos 0, mesy
+//			objsize Scale(350), scale20
+//			button gosub "Amazonほしい物リスト", *Amazon: mesy += scale20
+//			//http://www.amazon.co.jp/wishlist/181BGDSFXZC6M/?sort=priority
 		}
 
 		pos 0, mesy + Scale(100)

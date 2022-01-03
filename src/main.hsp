@@ -333,6 +333,9 @@
 	onexit 0
 	onerror 0
 
+	// タイマーはアプリケーション終了時に消す。
+	KillTimer WND_INFO(WND_MAIN, WI_HANDLE), TickTackTimerID
+
 	if videoCapFlg: gosub *VideoCapEmgStop
 	if lateEncodeFlg: gosub *VideoCapEmgStop
 

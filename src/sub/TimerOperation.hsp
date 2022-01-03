@@ -413,11 +413,15 @@ return 0
 
 #deffunc local exit onexit
 	//作成したブラシを削除
+	// 消す配列名が間違っているっぽい？
 	repeat COLOR_COUNT
-		DeleteObject COLOR_BRUSH(COLORREF_BRUSH, cnt)
+		//DeleteObject COLOR_BRUSH(COLORREF_BRUSH, cnt)
+		DeleteObject COLORREF(COLORREF_BRUSH, cnt)
 	loop
 	//タイマーを削除
-	KillTimer WND_INFO(WND_MAIN, WI_HANDLE), TickTackTimerID
+	// タイマーを作ってるのはmainなのだからそちらで消すのが正しい。
+	// ここで消すと、処理的にMainWindowが無くなってから処理されてエラーになることがある。
+	//KillTimer WND_INFO(WND_MAIN, WI_HANDLE), TickTackTimerID
 return
 
 #deffunc timerListLoad local loadfile, local row, local c1, local c2, local gap

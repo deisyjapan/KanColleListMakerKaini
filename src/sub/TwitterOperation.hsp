@@ -182,26 +182,28 @@ return
 		title "ツイートウィンドウ"
 		font "メイリオ",Scale(14)
 		pos Scale(10), Scale(10)
-		mes "Twitterへの投稿には認証が必要です"
-		mes "次のボタンを押すとブラウザが開くので表示されたコードを入力し、\nOKを押してください"
 
-		pos Scale(10), Scale(80)
-		objsize Scale(428), Scale(40)
-		button gosub "ブラウザを開いて認証する",*openbrowser
+// 作者ツイッターのアカウント(@KCLM2_dev)消失により機能が使えなくなっているので使用できなくする。
+		mes "艦これ一覧めいかー改二用ツイッターアカウント(@KCLM2_dev)\n消失により使用できなくなりました。"
+		mes ""
 
-		pos Scale(10), Scale(134)
-		mes "PIN"
-		PIN = ""
-		pos Scale(40), Scale(130)
-		input PIN, Scale(100), Scale(30)
-		objsize Scale(150), Scale(30)
-		pos Scale(150), Scale(130)
-		button gosub "OK",*twioauthok
+//		pos Scale(10), Scale(80)
+//		objsize Scale(428), Scale(40)
+//		button gosub "ブラウザを開いて認証する",*openbrowser
 
-		pos 0,Scale(240)
-		objsize Scale(448),Scale(30)
-		button gosub "Amazonほしい物リスト", *Amazon: mesy+=30
-
+//		pos Scale(10), Scale(134)
+//		mes "PIN"
+//		PIN = ""
+//		pos Scale(40), Scale(130)
+//		input PIN, Scale(100), Scale(30)
+//		objsize Scale(150), Scale(30)
+//		pos Scale(150), Scale(130)
+//		button gosub "OK",*twioauthok
+//
+//		pos 0,Scale(240)
+//		objsize Scale(448),Scale(30)
+//		button gosub "Amazonほしい物リスト", *Amazon: mesy+=30
+//
 		nidPop
 	}
 
