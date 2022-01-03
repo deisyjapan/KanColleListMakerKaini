@@ -5,8 +5,10 @@
 
 ## ダウンロード
 
-全てのバージョンは以下の場所からダウンロード出来ます。
-- https://ux.getuploader.com/KanColleListMakerKaini/
+<s>全てのバージョンは以下の場所からダウンロード出来ます。
+- https://ux.getuploader.com/KanColleListMakerKaini/</s>
+
+※2022/01/03現在、上記URLは削除され配布所が存在しなくなっているようです。
 
 ## コンパイル環境
 艦これ一覧めいかー改二をコンパイルするには次のソフトが必要です。
