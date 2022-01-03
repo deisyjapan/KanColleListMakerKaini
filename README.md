@@ -35,3 +35,8 @@ Copyright 2017 kanahiron
 Code licensed under the MIT License, see LICENSE.txt.
 
 Icon licensed under CC BY-ND 4.0: https://creativecommons.org/licenses/by-nd/4.0/
+
+## deisysoftによる修正
+・Twitter連携機能は連携用アカウント消失により使えなくなったため、削除しています。
+・Twitter連携機能は使えなくしていますが、コード上認証情報を保存する処理自体は残っています。
+
