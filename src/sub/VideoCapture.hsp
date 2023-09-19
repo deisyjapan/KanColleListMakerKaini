@@ -90,6 +90,12 @@
 		noteget x264presetStr, x264presetNum
 		noteunsel
 
+		//NVENCのプリセットを文字で取得する
+		nvencpresetStr = ""
+		notesel nvencpresetList
+		noteget nvencpresetStr, nvencpresetNum
+		noteunsel
+
 		videoFileName = strf("%s\\%s", videoCapSaveDir, Format@DateTimeFormatMod(saveName(SN_VIDEO)) )
 
 		//コマンドの組み立て
@@ -100,39 +106,49 @@
 			cmda = strf("cmd /K echo '  Duration: N/A, start: %7.6f, bitrate: 1536 kb/s'", 0.001*timeGetTime())
 		}
 
-		if (lateEncode){
-			//負荷軽減動画キャプチャ
-			//*
-			cmdv  = strf("\"%s\" -an -f gdigrab -draw_mouse %d -show_region %d ", ffmpegdir, videoCapHideCursor^1, videoCapShowFrame)
-			cmdv += strf("-video_size %dx%d -offset_x %d -offset_y %d ",videoCapSizeX, videoCapSizeY, videoCapX, videoCapY)
-			cmdv += strf("-framerate %d/1 -i desktop -vf fps=%d -pix_fmt yuv420p -c:v libx264 -crf %d -preset %s -tune zerolatency \"%s_v.mp4\"", videoCapFR, videoCapFR, 16, "ultrafast", videoFileName)
-			//*/
-
-			/*
+		if (useNvenc){
+			//NVEncキャプチャ
 			cmdv  = strf("\"%s\" -an -f gdigrab -draw_mouse %d -show_region %d ", ffmpegdir, videoCapHideCursor^1, videoCapShowFrame)
 			cmdv += strf("-video_size %dx%d -offset_x %d -offset_y %d ",videoCapSizeX, videoCapSizeY, videoCapX, videoCapY)
 			cmdv += strf("-framerate %d/1 -i desktop -vf fps=%d -pix_fmt yuv420p ", videoCapFR, videoCapFR)
-			cmdv += strf("-c:v hevc_nvenc  -preset lossless ")
+			cmdv += strf("-c:v hevc_nvenc -preset %s -tune hq -profile main ", nvencpresetStr)
 			cmdv += strf("\"%s_v.mp4\"", videoFileName)
-			//*/
-
-			/*
-			cmdv  = strf("\"%s\" -an -rtbufsize 256M -f dshow ", ffmpegdir)
-			cmdv += strf("-video_size %dx%d ",videoCapSizeX, videoCapSizeY)
-			cmdv += strf("-framerate %d/1 ", videoCapFR)
-			cmdv += strf("-i video=\"SCFF DirectShow Filter\" ")
-			//cmdv += strf("-vf fps=%d ", videoCapFR)
-			cmdv += strf("-pix_fmt yuv420p ")
-			cmdv += strf("-c:v hevc_nvenc -preset lossless ")
-			cmdv += strf("\"%s_v.mp4\"", videoFileName)
-			//*/
-			//SCFF DirectShow Filter
-
 
 		} else {
-			cmdv  = strf("\"%s\" -an -f gdigrab -draw_mouse %d -show_region %d ", ffmpegdir, videoCapHideCursor^1, videoCapShowFrame)
-			cmdv += strf("-video_size %dx%d -offset_x %d -offset_y %d ",videoCapSizeX, videoCapSizeY, videoCapX, videoCapY)
-			cmdv += strf("-framerate %d/1 -i desktop -vf fps=%d -pix_fmt yuv420p -c:v libx264 -crf %d -preset %s -tune zerolatency \"%s_v.mp4\"", videoCapFR, videoCapFR, videoCapCRF, x264presetStr, videoFileName)
+			if (lateEncode){
+				//負荷軽減動画キャプチャ
+				//*
+				cmdv  = strf("\"%s\" -an -f gdigrab -draw_mouse %d -show_region %d ", ffmpegdir, videoCapHideCursor^1, videoCapShowFrame)
+				cmdv += strf("-video_size %dx%d -offset_x %d -offset_y %d ",videoCapSizeX, videoCapSizeY, videoCapX, videoCapY)
+				cmdv += strf("-framerate %d/1 -i desktop -vf fps=%d -pix_fmt yuv420p -c:v libx264 -crf %d -preset %s -tune zerolatency \"%s_v.mp4\"", videoCapFR, videoCapFR, 16, "ultrafast", videoFileName)
+				//*/
+
+				/*
+				cmdv  = strf("\"%s\" -an -f gdigrab -draw_mouse %d -show_region %d ", ffmpegdir, videoCapHideCursor^1, videoCapShowFrame)
+				cmdv += strf("-video_size %dx%d -offset_x %d -offset_y %d ",videoCapSizeX, videoCapSizeY, videoCapX, videoCapY)
+				cmdv += strf("-framerate %d/1 -i desktop -vf fps=%d -pix_fmt yuv420p ", videoCapFR, videoCapFR)
+				cmdv += strf("-c:v hevc_nvenc  -preset lossless ")
+				cmdv += strf("\"%s_v.mp4\"", videoFileName)
+				//*/
+
+				/*
+				cmdv  = strf("\"%s\" -an -rtbufsize 256M -f dshow ", ffmpegdir)
+				cmdv += strf("-video_size %dx%d ",videoCapSizeX, videoCapSizeY)
+				cmdv += strf("-framerate %d/1 ", videoCapFR)
+				cmdv += strf("-i video=\"SCFF DirectShow Filter\" ")
+				//cmdv += strf("-vf fps=%d ", videoCapFR)
+				cmdv += strf("-pix_fmt yuv420p ")
+				cmdv += strf("-c:v hevc_nvenc -preset lossless ")
+				cmdv += strf("\"%s_v.mp4\"", videoFileName)
+				//*/
+				//SCFF DirectShow Filter
+
+
+			} else {
+				cmdv  = strf("\"%s\" -an -f gdigrab -draw_mouse %d -show_region %d ", ffmpegdir, videoCapHideCursor^1, videoCapShowFrame)
+				cmdv += strf("-video_size %dx%d -offset_x %d -offset_y %d ",videoCapSizeX, videoCapSizeY, videoCapX, videoCapY)
+				cmdv += strf("-framerate %d/1 -i desktop -vf fps=%d -pix_fmt yuv420p -c:v libx264 -crf %d -preset %s -tune zerolatency \"%s_v.mp4\"", videoCapFR, videoCapFR, videoCapCRF, x264presetStr, videoFileName)
+			}
 		}
 
 		// ==== 音声プロセスの開始 ====
@@ -278,18 +294,27 @@
 
 		//コマンド組み立て
 		if (noAudioFlg^1){
-			if (lateEncode){
-				//オーデイオ有り負荷軽減動画キャプチャ
-				cmdm = strf("\"%s\" -i \"%s_v.mp4\" -ss %f -i \"%s_a.wav\" -af volume=%s %s -c:v libx264 -crf %d -preset %s -c:a aac -b:a 128k \"%s.mp4\"", ffmpegdir, videoFileName, difftime, videoFileName, volumeStr, normalizeStr, videoCapCRF, x264presetStr, videoFileName)
+			if (useNvenc){
+				//オーデイオ有りNVEnc動画キャプチャ
+				cmdm = strf("\"%s\" -i \"%s_v.mp4\" -ss %f -i \"%s_a.wav\" -af volume=%s %s -c:v hevc_nvenc -c:a aac -b:a 128k \"%s.mp4\"", ffmpegdir, videoFileName, difftime, videoFileName, volumeStr, normalizeStr, videoFileName)
 			} else {
-				//オーデイオ有り従来の動画キャプチャ
-				cmdm = strf("\"%s\" -i \"%s_v.mp4\" -ss %f -i \"%s_a.wav\" -af volume=%s %s -c:v copy -c:a aac -b:a 128k \"%s.mp4\"", ffmpegdir, videoFileName, difftime, videoFileName, volumeStr, normalizeStr, videoFileName)
+				if (lateEncode){
+					//オーデイオ有り負荷軽減動画キャプチャ
+					cmdm = strf("\"%s\" -i \"%s_v.mp4\" -ss %f -i \"%s_a.wav\" -af volume=%s %s -c:v libx264 -crf %d -preset %s -c:a aac -b:a 128k \"%s.mp4\"", ffmpegdir, videoFileName, difftime, videoFileName, volumeStr, normalizeStr, videoCapCRF, x264presetStr, videoFileName)
+				} else {
+					//オーデイオ有り従来の動画キャプチャ
+					cmdm = strf("\"%s\" -i \"%s_v.mp4\" -ss %f -i \"%s_a.wav\" -af volume=%s %s -c:v copy -c:a aac -b:a 128k \"%s.mp4\"", ffmpegdir, videoFileName, difftime, videoFileName, volumeStr, normalizeStr, videoFileName)
+				}
 			}
 		} else {
-			if (lateEncode){
-				cmdm = strf("\"%s\" -i \"%s_v.mp4\" -c:v libx264 -crf %d -preset %s \"%s.mp4\"", ffmpegdir, videoFileName, videoCapCRF, x264presetStr, videoFileName)
+			if (useNvenc){
+				cmdm = strf("\"%s\" -i \"%s_v.mp4\" -c:v hevc_nvenc \"%s.mp4\"", ffmpegdir, videoFileName, videoFileName)
 			} else {
-				cmdm = strf("\"%s\" -i \"%s_v.mp4\" -c:v copy \"%s.mp4\"", ffmpegdir, videoFileName, videoFileName)
+				if (lateEncode){
+					cmdm = strf("\"%s\" -i \"%s_v.mp4\" -c:v libx264 -crf %d -preset %s \"%s.mp4\"", ffmpegdir, videoFileName, videoCapCRF, x264presetStr, videoFileName)
+				} else {
+					cmdm = strf("\"%s\" -i \"%s_v.mp4\" -c:v copy \"%s.mp4\"", ffmpegdir, videoFileName, videoFileName)
+				}
 			}
 		}
 
