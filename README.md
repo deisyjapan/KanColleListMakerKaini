@@ -40,3 +40,7 @@ Icon licensed under CC BY-ND 4.0: https://creativecommons.org/licenses/by-nd/4.0
 ・Twitter連携機能は連携用アカウント消失により使えなくなったため、削除しています。
 ・Twitter連携機能は使えなくしていますが、コード上認証情報を保存する処理自体は残っています。
 
+
+## NVENC対応
+・ffmpegがNVENCに対応している必要があります。
+- **[ffmpeg](https://www.gyan.dev/ffmpeg/builds/)**より最新版をダウンロードしてください。
