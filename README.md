@@ -42,5 +42,5 @@ Icon licensed under CC BY-ND 4.0: https://creativecommons.org/licenses/by-nd/4.0
 
 
 ## NVENC対応
-・ffmpegがNVENCに対応している必要があります。
-- **[ffmpeg](https://www.gyan.dev/ffmpeg/builds/)**より最新版をダウンロードしてください。
+ffmpegがNVENCに対応している必要があります。
+- **[Builds - CODEX FFMPEG @ gyan.dev](https://www.gyan.dev/ffmpeg/builds/)** より最新版をダウンロードしてください。
