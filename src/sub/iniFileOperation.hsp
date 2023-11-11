@@ -636,3 +636,12 @@ return
 	Write@iniMod "OtherListMode", "UserDefRect", userDefRect
 
 return
+// フォルダをD&Dした際、そのパスを保存先設定として保存する。
+// 必要なチェックは呼び出し元で行うこと。
+*dddirectorysave
+	Write@iniMod "Configuration", "ScreenShotSaveDir", sssavedir
+	Write@iniMod "Configuration", "ListSaveDir", listsavedir
+	Write@iniMod "Configuration", "IntervalShotSaveDir",intervalShotDir
+	Write@iniMod "Configuration", "SelectCapSaveDir",selectCapSaveDir
+
+return

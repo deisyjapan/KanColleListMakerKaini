@@ -391,7 +391,7 @@
 
 			pos Scale(5+96), mesy
 			objsize Scale(74), scale20
-			chkbox "西村艦隊", fleetWindowNishimura: mesy += scale20
+			chkbox "遊撃部隊", fleetWindowNishimura: mesy += scale20
 			fleetWindowNishimuraCId = stat
 			fleetWindowNishimuraCh = objinfo_hwnd(fleetWindowNishimuraCId)
 			sendmsg fleetWindowNishimuraCh, $F4, $9

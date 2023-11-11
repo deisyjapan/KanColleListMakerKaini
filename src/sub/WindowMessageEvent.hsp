@@ -529,6 +529,26 @@ return
 //ドロップ処理――――――――――――――――――――――――――――――――――
 *OnDropFiles
 
+	//フォルダ情報がドロップされたときは保存先設定を書き換える
+	nidPush
+	hdrop = wParam
+	sdim dropfile,1024
+	DragQueryFile hdrop, 0, varptr(dropfile), 1024
+	DragFinish hdrop
+	dropFile = cnvwtos(dropFile)
+	if peek(dropfile,0) = '"' : getstr dropfile, dropfile, 1, '"'
+
+	//ドロップした対象がディレクトリの場合
+	if ( PathIsDirectory(dropfile) ){
+		//設定ファイルを書き換える
+		sssavedir = dropfile
+		listsavedir = dropfile
+		intervalShotDir = dropfile
+		selectCapSaveDir = dropfile
+		gosub *dddirectorysave
+		logmes "ディレクトリをドロップしたので設定を変更"
+	}
+
 	if ( ginfo_intid == WND_MAIN && mode != MODE_LIST ){
 		return
 	}
