@@ -530,81 +530,56 @@ return
 *OnDropFiles
 
 	//フォルダ情報がドロップされたときは保存先設定を書き換える
+	// ここでドロップしたファイルの情報を先に取得すると、そのあとの処理で
+	// ファイルの情報が取得できなくて操作できなくなってしまうため、
+	// D&D結果情報を最初に保持して、ウィンドウに応じた処理野中で
+	// は再取得しないように処理を変更する。
+	// また関数の途中でreturnすると後処理が散らばるのでreturnが一か所に
+	// なるように分岐で処理する。
+
 	nidPush
 	hdrop = wParam
 	sdim dropfile,1024
+	dim dragPoint,2
 	DragQueryFile hdrop, 0, varptr(dropfile), 1024
+	DragQueryPoint hdrop, varptr(dragPoint)
 	DragFinish hdrop
 	dropFile = cnvwtos(dropFile)
 	if peek(dropfile,0) = '"' : getstr dropfile, dropfile, 1, '"'
 
-	//ドロップした対象がディレクトリの場合
+	// Windowにかかわらずドロップした対象がディレクトリの場合、ファイル保存先設定を書き換える。
 	if ( PathIsDirectory(dropfile) ){
-		//設定ファイルを書き換える
 		sssavedir = dropfile
 		listsavedir = dropfile
 		intervalShotDir = dropfile
 		selectCapSaveDir = dropfile
 		gosub *dddirectorysave
-		logmes "ディレクトリをドロップしたので設定を変更"
 	}
 
 	if ( ginfo_intid == WND_MAIN && mode != MODE_LIST ){
-		return
-	}
+		// メインウィンドウかつリストモード以外は何もしない
+	} else {
+		// メインウィンドウまたはスクショを登録可能な画面ならキャプチャ画像を追加する。
+		if ( ginfo_intid == WND_MAIN || ginfo_intid == WND_GRID ){
 
-	if ( ginfo_intid == WND_MAIN || ginfo_intid == WND_GRID ){
+			dropWindowId = ginfo(24)
 
-		nidPush
-		dropWindowId = ginfo(24)
-		hdrop = wParam
-		sdim dropfile,1024
-		DragQueryFile hdrop, 0, varptr(dropfile), 260
-		dropFile = cnvwtos(dropFile)
-		dim dragPoint,2
-		DragQueryPoint hdrop, varptr(dragPoint)
-		DragFinish hdrop
-		if peek(dropfile,0) = '"' : getstr dropfile, dropfile, 1, '"'
+			if ImgF_GetFormat(dropfile) = 0{
+				nidPop
+				return
+			}
 
-		if ImgF_GetFormat(dropfile) = 0{
-			nidPop
-			return
+			dropFlag = TRUE
+			addfilename = dropfile
+			gosub *addCapture
+
+			addfilename = ""
+			dropFlag = FALSE
 		}
-
-		dropFlag = TRUE
-		addfilename = dropfile
-		gosub *addCapture
-
-		addfilename = ""
-		dropFlag = FALSE
-		nidPop
 	}
 
-	if (ginfo_intid == WND_TWITTER){
-
-		nidPush
-
-		hdrop = wParam
-		sdim dropfile,1024
-		DragQueryFile hdrop, 0, varptr(dropfile), 1024
-		DragFinish hdrop
-		dropFile = cnvwtos(dropFile)
-		if peek(dropfile,0) = '"' : getstr dropfile, dropfile, 1, '"'
-
-		if (ImgF_GetFormat(dropfile) == 0){
-			nidPop
-			return
-		}
-
-		picHistoryLoad dropfile
-
-		gosub *picHistoryTop
-		gosub *picHistoryAddStack
-
-		nidPop
-
-	}
-
+	// Twitter投稿ウィンドウ用の処理は削除(表示されなくしているため)
+	nidPop
 return
 
 *WM_VSCROLL_Proc
