@@ -42,3 +42,7 @@ Icon licensed under CC BY-ND 4.0: https://creativecommons.org/licenses/by-nd/4.0
 ・(2023/11/12)ウィンドウにフォルダをD%Dしたとき、[SS保存先][一覧保存先][連続キャプチャ保存先][範囲選択キャプチャ保存先]の設定をD&Dしたフォルダに変更する機能を追加しています。
 
 
+
+## NVENC対応
+ffmpegがNVENCに対応している必要があります。
+- **[Builds - CODEX FFMPEG @ gyan.dev](https://www.gyan.dev/ffmpeg/builds/)** より最新版をダウンロードしてください。

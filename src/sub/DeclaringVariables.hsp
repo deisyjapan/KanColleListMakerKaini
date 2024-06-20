@@ -160,6 +160,8 @@
 
 	x264presetNum = 0
 	x264presetList = "ultrafast\nveryfast\nfaster\nfast\nmedium\nslow\nslower\nveryslow"
+	nvencpresetNum = 0
+	nvencpresetList = "p1\np2\np3\np4\np5\np6\np7"
 
 	maxSearchLevelStr = "無し", "A", "S"
 	maxSearchLevelPrev = -1
